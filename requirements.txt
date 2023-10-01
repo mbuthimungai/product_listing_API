@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic
+fastapi-pagination
+asyncpg
+SQLAlchemy
+python-dotenv
+alembic
+pydantic-settings

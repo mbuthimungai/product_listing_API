@@ -1,0 +1,50 @@
+
+# specify the compose version
+version: '3.7'
+
+# Specify the services for our docker compose setup
+services:
+  
+  api:
+    build:
+      # path to the directory containing the Dockerfile
+      context: .
+
+      # Specify the image name
+    image: products_api
+
+    # this volume is used to map the files and folders on the host to the container
+    # so if we change code on the host, code in the docker container will also be changed
+    volumes:
+      - .:/app
+
+    # Map port 8000 on the host to port 8000 on the container
+    ports:
+      - 8000:8000
+    
+    # Specify the .env file path
+    env_file:
+      - ./.env
+    
+    # Define a dependency on the "products_db" service, so it starts first
+    depends_on:
+      - products_db
+
+  products_db:
+    
+    # specify the image name of our database
+    # If the image is not found in our local repository
+    # It will be pulled from docker registry that is Docker Hub
+    image: postgres:16rc1-alpine3.18
+
+    # Mount a volume to persist postgreSQL data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:  # Use environment variables for db configuration
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+
+# Define a volume for persisting postgreSQL data
+volumes:
+  postgres_data:
