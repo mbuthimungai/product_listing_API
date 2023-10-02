@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import func, update
 from fastapi.encoders import jsonable_encoder
+from fastapi_pagination import Page
 
 ModelType = TypeVar("ModelType", bound=DeclarativeMeta)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -35,8 +36,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return query.scalar_one_or_none()
     
     # get all multiple entities
-    async def get_multi(self, db: AsyncSession, *, skip: int = 0, limit: int = 100) -> ModelType:
-        query = await db.execute(select(self.model))
+    async def get_multi(self, db: AsyncSession, *, skip: int = 0, limit: int = 100) -> Page[ModelType]:
+        query = await db.execute(select(self.model).offset(skip).limit(limit))
         return query.scalars().all()
     
     # search a specific entity

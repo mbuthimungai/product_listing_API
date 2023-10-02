@@ -9,7 +9,7 @@ from app.core.settings import settings
 from app.models.base import Base_
 from sqlalchemy.orm import declarative_base
 
-# Base = declarative_base
+
 
 target_metadata = Base_.metadata
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))

@@ -14,6 +14,7 @@ class CRUDProduct(CRUDBase[Product, ProductCreate, ProductUpdate]):
         return await super().get_or_create(db, defaults, **kwargs)
     
     async def get_multi(self, db: AsyncSession, *, skip: int = 0, limit: int = 20) -> Page[Product]:
+        print(f"limit {limit}")
         return await super().get_multi(db, skip=skip, limit=limit)
     
     async def update(self, db: AsyncSession, *, obj_current: Product, obj_new: ProductUpdate | Dict[str, Any] | Product):
